@@ -61,6 +61,21 @@ TEST(CandleTest, BodySizeLogic) {
     EXPECT_NEAR(candle.body_size(), 20.0, 0.0001);
 }
 
+TEST(CandleTest, IsRedTrue) {
+    Candle candle(120, 150, 90, 100);
+    EXPECT_TRUE(candle.is_red());
+}
+
+TEST(CandleTest, IsRedFalse) {
+    Candle candle(100, 150, 90, 120);
+    EXPECT_FALSE(candle.is_red());
+}
+
+TEST(CandleTest, IsRedLogic) {
+    Candle candle(100, 150, 90, 100);
+    EXPECT_FALSE(candle.is_red());
+}
+
 int main(int argc, char **argv) {
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
