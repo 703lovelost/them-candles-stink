@@ -1,0 +1,23 @@
+name: Google Tests
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Install dependencies
+      run: sudo apt-get install -y build-essential cmake
+
+    - name: Build and test
+      run: ./start.sh
+
+    - name: Remove build directory
+      run: ./unstart.sh
