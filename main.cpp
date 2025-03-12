@@ -46,6 +46,21 @@ TEST(CandleTest, FullSizeLogic) {
     EXPECT_NEAR(candle.full_size(), 60.0, 0.0001);
 }
 
+TEST(CandleTest, BodySizeMaxValue) {
+    Candle candle(100, 150, 90, 120);
+    EXPECT_DOUBLE_EQ(candle.body_size(), 20.0);
+}
+
+TEST(CandleTest, BodySizeMinValue) {
+    Candle candle(100, 100, 100, 100);
+    EXPECT_DOUBLE_EQ(candle.body_size(), 0.0);
+}
+
+TEST(CandleTest, BodySizeLogic) {
+    Candle candle(100, 150, 90, 120);
+    EXPECT_NEAR(candle.body_size(), 20.0, 0.0001);
+}
+
 int main(int argc, char **argv) {
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
