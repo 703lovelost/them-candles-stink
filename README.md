@@ -1,9 +1,9 @@
 ```
-mkdir build
-cd build
+    # To test candles
+    ./start.sh
+
+    # To get rid of them
+    ./unstart.sh
 ```
 
-версия Visual Studio может отличаться
-```
-cmake .. -G "Visual Studio 16 2019"
-```
+That's all. Them candles stink.
