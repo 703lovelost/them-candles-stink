@@ -31,6 +31,21 @@ TEST(CandleTest, ContainsLogic) {
     EXPECT_FALSE(candle.contains(80));
 }
 
+TEST(CandleTest, FullSizeMaxValue) {
+    Candle candle(100, 150, 90, 120);
+    EXPECT_DOUBLE_EQ(candle.full_size(), 60.0);
+}
+
+TEST(CandleTest, FullSizeMinValue) {
+    Candle candle(100, 100, 100, 100);
+    EXPECT_DOUBLE_EQ(candle.full_size(), 0.0);
+}
+
+TEST(CandleTest, FullSizeLogic) {
+    Candle candle(100, 150, 90, 120);
+    EXPECT_NEAR(candle.full_size(), 60.0, 0.0001);
+}
+
 int main(int argc, char **argv) {
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
