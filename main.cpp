@@ -76,6 +76,22 @@ TEST(CandleTest, IsRedLogic) {
     EXPECT_FALSE(candle.is_red());
 }
 
+TEST(CandleTest, IsGreenTrue) {
+    Candle candle(100, 150, 90, 120);
+    EXPECT_TRUE(candle.is_green());
+}
+
+TEST(CandleTest, IsGreenFalse) {
+    Candle candle(120, 150, 90, 100);
+    EXPECT_FALSE(candle.is_green());
+}
+
+TEST(CandleTest, IsGreenLogic) {
+    Candle candle(100, 150, 90, 100);
+    EXPECT_FALSE(candle.is_green());
+}
+
+
 int main(int argc, char **argv) {
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
