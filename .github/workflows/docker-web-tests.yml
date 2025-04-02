@@ -1,0 +1,31 @@
+name: Docker Web Tests
+on:
+    push:
+      branches: [ "feature/docker-web-hub" ]
+    pull_request:
+      branches: [ "feature/docker-web-hub" ]
+
+jobs:
+    main-test:
+      runs-on: ubuntu-latest
+      steps:
+          - uses: actions/checkout@v3
+
+          - name: build the containers and run them
+            run: docker compose up --build --abort-on-container-exit
+
+          - name: login to Docker Hub
+            uses: docker/login-action@v3
+            with:
+              username: ${{ vars.DOCKERHUB_USERNAME }}
+              password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+          - name: test-repo-app, docker tag && docker push
+            run: |
+              docker tag test-repo-app 703lovelost/test-repo-app
+              docker push 703lovelost/test-repo-app
+
+          - name: test-repo-web, docker tag && docker push
+            run: |
+              docker tag test-repo-web 703lovelost/test-repo-web
+              docker push 703lovelost/test-repo-web
