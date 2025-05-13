@@ -2,12 +2,12 @@ FROM nginx:latest
 
 RUN apt-get update && \
     apt-get install -y \
-    docker.io \
     curl
 
 COPY ./misc/nginx.conf /etc/nginx/nginx.conf
 
 RUN echo '#!/bin/sh \n \
+if [ ! -d "/logs" ]; then mkdir -p /logs; fi \n \
 cat /logs/test.log > /usr/share/nginx/html/index.html 2>&1 \n \
 service nginx start \
 ' > entrypoint.sh && \
