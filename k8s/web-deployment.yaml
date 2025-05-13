@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: web
+  template:
+    metadata:
+      labels:
+        app: web
+    spec:
+      volumes:
+        - name: logs-volume
+          persistentVolumeClaim:
+            claimName: logs-pvc
+      containers:
+        - name: test-repo-web
+          image: 703lovelost/test-repo-web
+          volumeMounts:
+            - mountPath: /logs
+              name: logs-volume
+          ports:
+            - containerPort: 80

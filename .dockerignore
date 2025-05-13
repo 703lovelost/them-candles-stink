@@ -1,2 +1,3 @@
 candles/build
 .gitignore
+k8s/
