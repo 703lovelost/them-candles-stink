@@ -42,14 +42,14 @@ jobs:
           - name: get version for tag
             id: get-version
             run: |
-              VERSION=$(awk '/^version:/ {print $2}' test-repo-chart/Chart.yaml)
+              VERSION=$(awk '/^version:/ {print $2}' helm/test-repo-chart/Chart.yaml)
               echo "version=${VERSION}" >> $GITHUB_OUTPUT
               echo "tag=v${VERSION}" >> $GITHUB_OUTPUT
 
           - name: package helm chart
             run: |
               mkdir -p ./helm-package
-              helm package ./test-repo-chart -d ./helm-package --version ${{ steps.get-version.outputs.version }}
+              helm package ./helm/test-repo-chart -d ./helm-package --version ${{ steps.get-version.outputs.version }}
               ls -la ./helm-package/
 
           - name: Create Git tag
