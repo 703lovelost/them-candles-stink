@@ -1,12 +1,43 @@
+# Them Candles Stink
+
+It's recommended to use minikube for maintaining the cluster.
+
+## Preparation
+
 ```
-    # Run the cluster through minikube
+    # Make sure the minikube container is on
+    minikube start
+
+    # Install 'local-path' storage class
+    minikube addons enable storage-provisioner-rancher
+```
+
+## Run
+
+### Through minikube
+
+```
+    # Run the cluster
     minikube kubectl -- apply -f ./k8s
 
-    # Get URL to check the web output
-    minikube service web-service --url
-
-    # Stop the cluster through minikube
+    # Stop the cluster
     minikube kubectl -- stop -f ./k8s
+```
+
+### Through Helm
+
+```
+    # Run the cluster
+    helm install test-release ./helm/test-repo-chart/
+
+    # Stop the cluster
+    helm uninstall test-release
+```
+
+## Check the output
+
+```
+    minikube service web-service --url
 ```
 
 That's all. Them candles stink.

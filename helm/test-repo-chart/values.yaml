@@ -1,0 +1,24 @@
+# Default values for test-repo-chart.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  app:
+    repository: 703lovelost/test-repo-app
+    pullPolicy: IfNotPresent
+  web:
+    repository: 703lovelost/test-repo-web
+    pullPolicy: IfNotPresent
+
+service:
+  type: NodePort
+  port: 80
+  nodePort: 32681
+
+persistence:
+  enabled: true
+  storageClass: "local-path"
+  accessMode: ReadWriteOnce
+  size: 1Gi

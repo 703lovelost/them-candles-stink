@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: app-pod
+spec:
+  containers:
+    - name: test-repo-app
+      image: "{{ .Values.image.app.repository }}"
+      imagePullPolicy: {{ .Values.image.app.pullPolicy }}
+      volumeMounts:
+        - mountPath: /logs
+          name: logs-volume
+  restartPolicy: Never
+  volumes:
+    - name: logs-volume
+      persistentVolumeClaim:
+        claimName: logs-pvc

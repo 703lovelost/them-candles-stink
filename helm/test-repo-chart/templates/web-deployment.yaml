@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: web
+  template:
+    metadata:
+      labels:
+        app: web
+    spec:
+      volumes:
+        - name: logs-volume
+          persistentVolumeClaim:
+            claimName: logs-pvc
+      containers:
+        - name: test-repo-web
+          image: "{{ .Values.image.web.repository }}"
+          imagePullPolicy: {{ .Values.image.web.pullPolicy }}
+          volumeMounts:
+            - mountPath: /logs
+              name: logs-volume
+          ports:
+            - containerPort: {{ .Values.service.port }}
