@@ -7,70 +7,72 @@ on:
       branches: [ "feature/k8s-helm" ]
 
 jobs:
-    main-test:
-      environment: DOCKER
-      runs-on: ubuntu-latest
-      steps:
-          - uses: actions/checkout@v3
-            with:
-              fetch-depth: 0
+  main-test:
+    environment: DOCKER
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+        - uses: actions/checkout@v3
+          with:
+            fetch-depth: 0
 
-          - name: login to Docker Hub
-            uses: docker/login-action@v3
-            with:
-              username: ${{ secrets.DOCKER_USERNAME }}
-              password: ${{ secrets.DOCKER_TOKEN }}
+        - name: login to Docker Hub
+          uses: docker/login-action@v3
+          with:
+            username: ${{ secrets.DOCKER_USERNAME }}
+            password: ${{ secrets.DOCKER_TOKEN }}
 
-          - name: build the containers and run them
-            run: docker compose up --build --abort-on-container-exit
+        - name: build the containers and run them
+          run: docker compose up --build --abort-on-container-exit
 
-          - name: test-repo-app, docker tag && docker push
-            run: |
-              docker tag them-candles-stink-app 703lovelost/test-repo-app
-              docker push 703lovelost/test-repo-app
+        - name: test-repo-app, docker tag && docker push
+          run: |
+            docker tag them-candles-stink-app 703lovelost/test-repo-app
+            docker push 703lovelost/test-repo-app
 
-          - name: test-repo-web, docker tag && docker push
-            run: |
-              docker tag them-candles-stink-web 703lovelost/test-repo-web
-              docker push 703lovelost/test-repo-web
-          
-          - name: install helm
-            uses: azure/setup-helm@v3
-            with:
-              version: 'v3.17.3'
+        - name: test-repo-web, docker tag && docker push
+          run: |
+            docker tag them-candles-stink-web 703lovelost/test-repo-web
+            docker push 703lovelost/test-repo-web
+        
+        - name: install helm
+          uses: azure/setup-helm@v3
+          with:
+            version: 'v3.17.3'
 
-          - name: get version for tag
-            id: get-version
-            run: |
-              VERSION=$(awk '/^version:/ {print $2}' helm/test-repo-chart/Chart.yaml)
-              echo "version=${VERSION}" >> $GITHUB_OUTPUT
-              echo "tag=v${VERSION}" >> $GITHUB_OUTPUT
+        - name: get version for tag
+          id: get-version
+          run: |
+            VERSION=$(awk '/^version:/ {print $2}' helm/test-repo-chart/Chart.yaml)
+            echo "version=${VERSION}" >> $GITHUB_OUTPUT
+            echo "tag=v${VERSION}" >> $GITHUB_OUTPUT
 
-          - name: package helm chart
-            run: |
-              mkdir -p ./helm-package
-              helm package ./helm/test-repo-chart -d ./helm-package --version ${{ steps.get-version.outputs.version }}
-              ls -la ./helm-package/
+        - name: package helm chart
+          run: |
+            mkdir -p ./helm-package
+            helm package ./helm/test-repo-chart -d ./helm-package --version ${{ steps.get-version.outputs.version }}
+            ls -la ./helm-package/
 
-          - name: create git tag
-            uses: rickstaa/action-create-tag@v1
-            id: "tag_create"
-            with:
-              tag: "latest"
-              tag_exists_error: false
-              message: "Latest release"
+        - name: create git tag
+          uses: rickstaa/action-create-tag@v1
+          id: "tag_create"
+          with:
+            tag: "latest"
+            tag_exists_error: false
+            message: "Release $TAG"
 
-          - name: create github release
-            if: startsWith(github.ref, 'refs/tags/v')
-            uses: softprops/action-gh-release@v1
-            with:
-              tag_name: ${{ github.ref_name }}
-              name: Release ${{ github.ref_name }}
-              body: |
-                Helm chart release ${{ github.ref_name }}
-                Includes:
-                - test-repo-app
-                - test-repo-web
-              files: ./helm-package/*.tgz
-            env:
-              GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        - name: create github release
+          if: startsWith(github.ref, 'refs/tags/v')
+          uses: softprops/action-gh-release@v1
+          with:
+            tag_name: ${{ github.ref_name }}
+            name: Release ${{ github.ref_name }}
+            body: |
+              Helm chart release ${{ github.ref_name }}
+              Includes:
+              - test-repo-app
+              - test-repo-web
+            files: ./helm-package/*.tgz
+          env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
