@@ -35,4 +35,5 @@ public:
 	bool is_green() const noexcept;
 	bool is_red() const noexcept;
 
+	bool this_candle_stink() const noexcept;
 };

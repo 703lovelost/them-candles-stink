@@ -91,6 +91,11 @@ TEST(CandleTest, IsGreenLogic) {
     EXPECT_FALSE(candle.is_green());
 }
 
+TEST(StinkTest, ThemCandlesStinkLogic) {
+    Candle candle(100, 150, 90, 100);
+    EXPECT_TRUE(candle.this_candle_stink());
+}
+
 
 int main(int argc, char **argv) {
     ::testing::InitGoogleTest(&argc, argv);

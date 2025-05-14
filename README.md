@@ -40,4 +40,10 @@ It's recommended to use minikube for maintaining the cluster.
     minikube service web-service --url
 ```
 
+## Update the pods
+
+```
+    minikube rollout restart pod/app-pod deployment/web
+```
+
 That's all. Them candles stink.
